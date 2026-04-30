@@ -1,0 +1,6 @@
+[
+  { "productId": 1, "name": "Blue Top", "category": "Women > Tops", "brand": "Polo" },
+  { "productId": 2, "name": "Men Tshirt", "category": "Men > Tshirts", "brand": "H&M" },
+  { "productId": 3, "name": "Sleeveless Dress", "category": "Women > Dress", "brand": "Madame" }
+]
+

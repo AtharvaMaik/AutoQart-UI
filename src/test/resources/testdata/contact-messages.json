@@ -1,0 +1,5 @@
+[
+  { "name": "Aarav Tester", "email": "aarav.tester@example.com", "subject": "Framework feedback", "message": "Validating the contact form using a resume-ready Selenium framework." },
+  { "name": "Isha QA", "email": "isha.qa@example.com", "subject": "Regression run", "message": "Running a smoke suite and verifying successful submission behavior." }
+]
+

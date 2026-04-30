@@ -1,0 +1,6 @@
+[
+  { "keyword": "Blue Top", "expectedProduct": "Blue Top" },
+  { "keyword": "Men Tshirt", "expectedProduct": "Men Tshirt" },
+  { "keyword": "Dress", "expectedProduct": "Dress" }
+]
+
