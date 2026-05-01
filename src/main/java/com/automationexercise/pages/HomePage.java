@@ -4,6 +4,7 @@ import com.automationexercise.utils.ConfigReader;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class HomePage extends BasePage {
     private final By header = By.id("header");
@@ -97,14 +98,17 @@ public class HomePage extends BasePage {
     }
 
     public boolean isLoggedInBannerVisible() {
+        dismissBlockingPopups();
         return isDisplayed(loggedInUser);
     }
 
     public String getLoggedInBannerText() {
+        dismissBlockingPopups();
         return text(loggedInUser);
     }
 
     public void logout() {
+        dismissBlockingPopups();
         click(By.xpath("//a[contains(.,'Logout')]"));
     }
 
@@ -123,5 +127,21 @@ public class HomePage extends BasePage {
 
     public boolean pageContains(String text) {
         return driver.getPageSource().contains(text);
+    }
+
+    private void dismissBlockingPopups() {
+        By modalClose = By.xpath(
+                "//div[@role='dialog']//*[contains(normalize-space(),'Close') or contains(normalize-space(),'Done')]");
+        List<WebElement> closeButtons = driver.findElements(modalClose);
+        for (WebElement button : closeButtons) {
+            if (button.isDisplayed()) {
+                try {
+                    ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+                    return;
+                } catch (Exception ignored) {
+                    // Try the next candidate in the dialog if the first visible element is not clickable.
+                }
+            }
+        }
     }
 }
