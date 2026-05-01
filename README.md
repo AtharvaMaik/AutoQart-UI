@@ -1,16 +1,13 @@
 # AutoQart UI
 
-`AutoQart UI` is a resume-ready UI test automation framework for [Automation Exercise](https://automationexercise.com), built with `Java`, `Selenium WebDriver`, `TestNG`, `Maven`, `Allure Reports`, and `GitHub Actions`.
+AutoQart UI is a Selenium-based UI automation framework for [Automation Exercise](https://automationexercise.com). It is built with `Java`, `TestNG`, `Maven`, `Allure`, and `GitHub Actions`, and is organized around reusable page objects, workflow-based test suites, and CI-friendly execution.
 
-It is designed to look and behave like a real beginner-friendly SDET project: reusable page objects, data-driven tests, cross-browser support, smoke and regression suites, reporting, and CI execution.
-
-## Highlights
-- Automated `61` UI test scenarios across authentication, navigation, products, cart, checkout, contact form, and subscription flows
+## Overview
+- Covers authentication, navigation, products, cart, checkout-entry, contact form, and subscription flows
 - Supports `Chrome` and `Edge`
-- Uses `Page Object Model (POM)` with reusable framework utilities
-- Generates `Allure` results and screenshot evidence for failures
-- Runs smoke tests on every push with `GitHub Actions`
-- Includes `Maven Wrapper` so the project can run without a local Maven install
+- Separates execution into `smoke` and `regression` suites
+- Generates Allure results and screenshot evidence for failures
+- Includes Maven Wrapper for consistent local and CI execution
 
 ## Tech Stack
 - Java 17
@@ -23,28 +20,29 @@ It is designed to look and behave like a real beginner-friendly SDET project: re
 - Log4j2
 - GitHub Actions
 
-## What This Project Automates
-- User signup, login, logout, invalid login, and duplicate-email validation
-- Home page, header navigation, categories, brands, and recommended content checks
-- Product search, product details, category filters, and brand filters
-- Add-to-cart, remove-from-cart, multi-product cart, and cart persistence scenarios
-- Guest checkout prompt and registered-user checkout entry flows
+## Test Coverage
+- User signup, login, logout, invalid login, and duplicate-email handling
+- Home page and header navigation validation
+- Category and brand navigation
+- Product search and product details flows
+- Add-to-cart, remove-from-cart, multi-item cart, and cart persistence scenarios
+- Guest checkout prompts and registered-user checkout entry flows
 - Contact us form submission with file upload
-- Footer email subscription validation
+- Footer subscription behavior
 
-## Framework Design
+## Architecture
 - `src/main/java/com/automationexercise/pages`
-  contains reusable page objects for each major flow
-- `src/main/java/com/automationexercise/utils`
-  includes config loading, waits, screenshots, JSON readers, random test data, and data providers
+  Page objects for each major workflow
 - `src/main/java/com/automationexercise/drivers`
-  handles browser creation and runtime options
+  Browser creation and runtime configuration
+- `src/main/java/com/automationexercise/utils`
+  Config loading, waits, screenshots, JSON readers, random data, and data providers
 - `src/main/java/com/automationexercise/listeners`
-  attaches test evidence to Allure on failures
+  TestNG listener integration for screenshots and Allure attachments
 - `src/test/java/com/automationexercise/tests`
-  groups tests by business workflow instead of random page coverage
+  Test classes grouped by business workflow
 - `src/test/resources`
-  stores config, suite XML files, logs, and JSON test data
+  Config, suite XML files, logging config, and JSON test data
 
 ## Project Structure
 ```text
@@ -74,16 +72,35 @@ AutoQart-UI
 `-- docs
 ```
 
-## Run The Project
+## Prerequisites
+- Java 17 or newer
+- Chrome or Edge installed locally
+- Optional: Allure CLI if you want to render reports locally
 
-### Using Maven Wrapper
+## Configuration
+Runtime settings live in `src/test/resources/config.properties`.
+
+Available settings include:
+- `base.url`
+- `browser`
+- `headless`
+- `implicit.wait`
+- `explicit.wait`
+- `page.load.timeout`
+- `script.timeout`
+
+These can also be overridden from the command line with system properties such as `-Dbrowser=edge` or `-Dheadless=true`.
+
+## Running The Tests
+
+### With Maven Wrapper
 ```powershell
 .\mvnw.cmd clean test
 .\mvnw.cmd "-DsuiteXmlFile=src/test/resources/smoke.xml" "-Dheadless=true" "-Dbrowser=chrome" test
 .\mvnw.cmd "-DsuiteXmlFile=src/test/resources/regression.xml" "-Dheadless=true" "-Dbrowser=edge" test
 ```
 
-### Using Maven
+### With Maven
 ```bash
 mvn clean test
 mvn clean test -DsuiteXmlFile=src/test/resources/smoke.xml
@@ -92,9 +109,9 @@ mvn clean test -Dbrowser=edge
 ```
 
 ## Reporting
-- Raw Allure results are written to `allure-results/`
+- Allure raw results are written to `allure-results/`
 - Failure screenshots are written to `artifacts/screenshots/`
-- GitHub Actions uploads report artifacts after execution
+- The GitHub Actions workflow uploads these artifacts after each run
 
 To open the report locally:
 ```bash
@@ -102,12 +119,15 @@ allure serve allure-results
 ```
 
 ## CI/CD
-- Smoke suite runs on every push and pull request
-- Regression suite runs on a nightly schedule
-- Workflow uploads Allure results and screenshots as artifacts
+The repository includes a GitHub Actions workflow at `.github/workflows/ui-automation.yml`.
+
+It currently:
+- runs the smoke suite on push and pull request
+- runs the regression suite on a nightly schedule
+- uploads Allure results and screenshots as artifacts
 
 ## Demo Execution
-A wrapper-based live demo run is documented in [docs/demo-run.md](docs/demo-run.md).
+A wrapper-based live execution example is documented in [docs/demo-run.md](docs/demo-run.md).
 
 Verified command:
 ```powershell
@@ -117,11 +137,6 @@ Verified command:
 Verified target website:
 - `https://automationexercise.com`
 
-## Resume Value
-- Automated `50+` test cases with real browser execution
-- Reduced the project to reusable, maintainable framework components
-- Added CI-based smoke coverage for every code push
-- Demonstrated reporting, test organization, and engineering discipline expected from an entry-level SDET
-
-## Resume-Ready Description
-Developed `AutoQart UI`, a scalable UI automation framework using `Java, Selenium WebDriver, TestNG, Maven, Allure Reports, and GitHub Actions` for an e-commerce practice application. Implemented `Page Object Model`, JSON-driven test data, reusable framework utilities, screenshot-based failure reporting, cross-browser execution, and CI-integrated smoke/regression suites. Automated `61` UI scenarios across authentication, product search, cart, checkout, contact form, and navigation workflows.
+## Notes
+- Chrome may emit CDP compatibility warnings depending on the locally installed browser version. In current verification runs, those warnings did not block execution.
+- SLF4J may emit a missing binder warning at runtime. It does not affect compilation or test execution in the current setup.
